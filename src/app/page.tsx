@@ -276,7 +276,8 @@ export default function Home() {
               </Link>
             </div>
           </div>
-        </section>
+        </Reveal>
+      </section>
 
         {/* CORE SYSTEM ARCHITECTURE */}
         <section id="architecture" className="w-full mb-48 scroll-mt-32">
