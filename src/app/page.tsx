@@ -131,7 +131,7 @@ export default function Home() {
     e.preventDefault();
     const subject = encodeURIComponent(`Inquiry from ${formName}`);
     const body = encodeURIComponent(`Name: ${formName}\nEmail: ${formEmail}\n\nMessage:\n${formMessage}`);
-    const mailtoLink = `mailto:it22026484@my.sliit.lk?subject=${subject}&body=${body}`;
+    const mailtoLink = `mailto:sdse1124@gmail.com?subject=${subject}&body=${body}`;
     window.location.href = mailtoLink;
     setIsSent(true);
     setTimeout(() => setIsSent(false), 5000);
@@ -548,7 +548,7 @@ export default function Home() {
                       </div>
                       <div>
                         <p className="text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-1">Email</p>
-                        <p className="text-white font-medium text-base">it22026484@my.sliit.lk</p>
+                        <a href="mailto:sdse1124@gmail.com" className="text-white font-medium text-base hover:text-brand transition-colors">Inquiry for Collaboration</a>
                       </div>
                     </div>
                     <div className="flex items-center gap-6 group">
