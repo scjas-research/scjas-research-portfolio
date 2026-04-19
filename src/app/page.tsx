@@ -43,11 +43,33 @@ const Reveal = ({ children, className = "", animation = "reveal-fade-up", thresh
 };
 
 const TeamCard = ({ member, idx, isSupervisor = false }: { member: any, idx: number, isSupervisor?: boolean }) => {
+  const [isColored, setIsColored] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsColored(true);
+        } else {
+          setIsColored(false);
+        }
+      },
+      { threshold: 0.6 } // Trigger color when 60% of the card is in focus
+    );
+
+    if (cardRef.current) observer.observe(cardRef.current);
+    return () => {
+      if (cardRef.current) observer.unobserve(cardRef.current);
+    };
+  }, []);
+
   return (
     <div 
+      ref={cardRef}
       className={`glass-card p-8 group relative flex flex-col items-center text-center bg-white/[0.01] hover:bg-white/[0.03] transition-all duration-700 ${isSupervisor ? 'border-brand/20 shadow-[0_0_20px_rgba(201,162,39,0.05)]' : ''}`} 
     >
-      <div className={`mb-6 overflow-hidden relative transition-all duration-1000 ${isSupervisor ? 'w-40 h-40 rounded-[32px] border border-brand/20 shadow-xl' : 'w-28 h-28 rounded-full border border-white/10 bg-[#070d19]'} grayscale group-hover:grayscale-0`}>
+      <div className={`mb-6 overflow-hidden relative transition-all duration-1000 ${isSupervisor ? 'w-40 h-40 rounded-[32px] border border-brand/20 shadow-xl' : 'w-28 h-28 rounded-full border border-white/10 bg-[#070d19]'} ${isColored ? 'grayscale-0 scale-100' : 'grayscale'} group-hover:grayscale-0`}>
         <Image 
           src={member.photo} 
           alt={member.name} 
