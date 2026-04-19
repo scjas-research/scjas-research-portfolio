@@ -430,16 +430,14 @@ export default function Home() {
                  </Reveal>
                  
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                   {[
-                     { title: "Project Charter", link: "#" },
-                     { title: "Proposal Document", link: "#" },
-                     { title: "Checklist Document", link: "#" },
-                     { title: "Report – Ekanayake S.D.S.", link: "https://drive.google.com/file/d/1wKiyHZAADBNYzIQAgQ2kPyUaNTOeC0jM/view?usp=sharing" },
-                     { title: "Report – Navashanthan T.", link: "https://drive.google.com/file/d/1RYttyOul9FzY-sRxPVBnT8Zlu7CW431V/view?usp=sharing" },
-                     { title: "Report – Kabisek S.", link: "https://drive.google.com/file/d/19Ycqx_MbsMf3vL2yG6JrlkNdZI1rlsuu/view?usp=sharing" },
-                     { title: "Report – Sivajanthan S.", link: "https://drive.google.com/file/d/1mamruNF1itgXoYXBgy3I_z0QdPYc5Ik7/view?usp=sharing" },
-                     { title: "Final Dissertation", link: "#" }
-                   ].map((doc, idx) => (
+                    {[
+                      { title: "Individual Proposal – Ekanayake S.D.S.", link: "https://drive.google.com/file/d/1wKiyHZAADBNYzIQAgQ2kPyUaNTOeC0jM/view?usp=sharing" },
+                      { title: "Individual Proposal – Navashanthan T.", link: "https://drive.google.com/file/d/1RYttyOul9FzY-sRxPVBnT8Zlu7CW431V/view?usp=sharing" },
+                      { title: "Individual Proposal – Kabisek S.", link: "https://drive.google.com/file/d/19Ycqx_MbsMf3vL2yG6JrlkNdZI1rlsuu/view?usp=sharing" },
+                      { title: "Individual Proposal – Sivajanthan S.", link: "https://drive.google.com/file/d/1mamruNF1itgXoYXBgy3I_z0QdPYc5Ik7/view?usp=sharing" },
+                      { title: "Final Dissertation", link: "#" },
+                      { title: "Checklist Collection", link: "https://drive.google.com/drive/folders/1pm2IWTxgK3SkGL44EjQWkvRtdoDsfVma?usp=sharing" }
+                    ].map((doc, idx) => (
                      <Reveal key={idx} animation="reveal-scale-in">
                        <Link href={doc.link} target="_blank" className="flex items-center justify-between p-5 glass-card bg-white/[0.01] hover:bg-white/[0.04] border-white/5 group border-l-2 border-l-transparent hover:border-l-brand transition-all">
                          <div className="max-w-[80%]">
