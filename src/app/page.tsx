@@ -4,67 +4,50 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-const Reveal = ({ children, className = "", animation = "reveal-fade-up", threshold = 0.1 }: { children: React.ReactNode, className?: string, animation?: string, threshold?: number }) => {
+const Reveal = ({ children, className = "", animation = "reveal-fade-up", threshold = 0.1, delay = 0 }: { children: React.ReactNode, className?: string, animation?: string, threshold?: number, delay?: number }) => {
   const [isInView, setIsInView] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // High-reliability fallback: ensure visibility even if observer behaves unexpectedly
+    const fallbackTimer = setTimeout(() => setIsInView(true), 2000);
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsInView(true);
+          clearTimeout(fallbackTimer);
+          observer.disconnect(); // Once visible, we don't need to observe anymore
         }
       },
       { threshold }
     );
 
     if (ref.current) observer.observe(ref.current);
+    
     return () => {
+      clearTimeout(fallbackTimer);
       if (ref.current) observer.unobserve(ref.current);
     };
   }, [threshold]);
 
   return (
-    <div ref={ref} className={`${animation} ${isInView ? 'in-view' : ''} ${className}`}>
+    <div 
+      ref={ref} 
+      className={`${animation} ${isInView ? 'in-view' : 'opacity-0'} ${className} transition-opacity duration-700`}
+      style={{ transitionDelay: `${delay}s` }}
+    >
       {children}
     </div>
   );
 };
 
 const TeamCard = ({ member, idx, isSupervisor = false }: { member: any, idx: number, isSupervisor?: boolean }) => {
-  const [isInView, setIsInView] = useState(false);
-  const cardRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true);
-        } else {
-          setIsInView(false);
-        }
-      },
-      { threshold: 0.5 } // Trigger when 50% of the card is visible
-    );
-
-    if (cardRef.current) {
-      observer.observe(cardRef.current);
-    }
-
-    return () => {
-      if (cardRef.current) {
-        observer.unobserve(cardRef.current);
-      }
-    };
-  }, []);
-
   return (
     <div 
-      ref={cardRef}
-      className={`glass-card p-8 group relative flex flex-col items-center text-center reveal-scale-in bg-white/[0.01] hover:bg-white/[0.03] transition-all duration-700 ${isSupervisor ? 'border-brand/20 shadow-[0_0_20px_rgba(201,162,39,0.05)]' : ''}`} 
-      style={{ animationDelay: `${idx * 0.1}s` }}
+      className={`glass-card p-8 group relative flex flex-col items-center text-center bg-white/[0.01] hover:bg-white/[0.03] transition-all duration-700 ${isSupervisor ? 'border-brand/20 shadow-[0_0_20px_rgba(201,162,39,0.05)]' : ''}`} 
     >
-      <div className={`mb-6 overflow-hidden relative transition-all duration-1000 ${isSupervisor ? 'w-40 h-40 rounded-[32px] border border-brand/20 shadow-xl' : 'w-28 h-28 rounded-full border border-white/10 bg-[#070d19]'} ${isInView ? 'grayscale-0 scale-100' : 'grayscale'}`}>
+      <div className={`mb-6 overflow-hidden relative transition-all duration-1000 ${isSupervisor ? 'w-40 h-40 rounded-[32px] border border-brand/20 shadow-xl' : 'w-28 h-28 rounded-full border border-white/10 bg-[#070d19]'} grayscale group-hover:grayscale-0`}>
         <Image 
           src={member.photo} 
           alt={member.name} 
@@ -484,12 +467,14 @@ export default function Home() {
         </section>
 
         {/* TEAM SECTION */}
-        <section id="team" className="w-full mb-48 reveal-fade-up scroll-mt-32">
-          <div className="text-center mb-24">
-            <h2 className="text-4xl lg:text-6xl font-bold text-white tracking-tight mb-4">Our Team</h2>
-            <div className="w-20 h-1 bg-brand mx-auto mb-6"></div>
-            <p className="text-slate-400 uppercase tracking-[0.3em] text-[10px] font-bold">Research Affiliation 2025</p>
-          </div>
+        <section id="team" className="w-full mb-48 scroll-mt-32">
+          <Reveal>
+            <div className="text-center mb-24">
+              <h2 className="text-4xl lg:text-6xl font-bold text-white tracking-tight mb-4">Our Team</h2>
+              <div className="w-20 h-1 bg-brand mx-auto mb-6"></div>
+              <p className="text-slate-400 uppercase tracking-[0.3em] text-[10px] font-bold">Research Affiliation 2025</p>
+            </div>
+          </Reveal>
 
           <div className="space-y-24">
             {/* Supervisors */}
@@ -500,7 +485,9 @@ export default function Home() {
                   { name: "Dr. Lakmini Abeywardena", role: "Supervisor", photo: `${BASE_PATH}/team/lakmini.jfif`, linkedin: "https://www.linkedin.com/in/lakmini-abeywardhana-65283aa9/", email: "lakmini.d@sliit.lk", id: "Supervisor" },
                   { name: "Ms. Malithi Navarathne", role: "Co-Supervisor", photo: `${BASE_PATH}/team/malithi.png`, linkedin: "https://www.linkedin.com/in/malithi-nawarathne-2a443b18b/", email: "malithi.n@sliit.lk", id: "Co-Supervisor" }
                 ].map((m, idx) => (
-                  <TeamCard key={idx} member={m} idx={idx} isSupervisor />
+                  <Reveal key={idx} animation="reveal-scale-in">
+                    <TeamCard member={m} idx={idx} isSupervisor />
+                  </Reveal>
                 ))}
               </div>
             </div>
