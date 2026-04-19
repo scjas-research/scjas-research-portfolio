@@ -1,8 +1,67 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
+
+const TeamCard = ({ member, idx, isSupervisor = false }: { member: any, idx: number, isSupervisor?: boolean }) => {
+  const [isInView, setIsInView] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+        } else {
+          setIsInView(false);
+        }
+      },
+      { threshold: 0.5 } // Trigger when 50% of the card is visible
+    );
+
+    if (cardRef.current) {
+      observer.observe(cardRef.current);
+    }
+
+    return () => {
+      if (cardRef.current) {
+        observer.unobserve(cardRef.current);
+      }
+    };
+  }, []);
+
+  return (
+    <div 
+      ref={cardRef}
+      className={`glass-card p-8 group relative flex flex-col items-center text-center reveal-scale-in bg-white/[0.01] hover:bg-white/[0.03] transition-all duration-700 ${isSupervisor ? 'border-brand/20 shadow-[0_0_20px_rgba(201,162,39,0.05)]' : ''}`} 
+      style={{ animationDelay: `${idx * 0.1}s` }}
+    >
+      <div className={`mb-6 overflow-hidden relative transition-all duration-1000 ${isSupervisor ? 'w-40 h-40 rounded-[32px] border border-brand/20 shadow-xl' : 'w-28 h-28 rounded-full border border-white/10 bg-[#070d19]'} ${isInView ? 'grayscale-0 scale-100' : 'grayscale'}`}>
+        <Image 
+          src={member.photo} 
+          alt={member.name} 
+          fill 
+          className={`object-cover transition-all duration-1000 ${isSupervisor ? 'scale-105 group-hover:scale-100' : ''}`} 
+          unoptimized 
+        />
+      </div>
+      
+      <h4 className={`font-bold text-white mb-1.5 tracking-tight uppercase ${isSupervisor ? 'text-xl' : 'text-lg'}`}>{member.name}</h4>
+      <p className="text-brand text-[9px] font-bold mb-4 tracking-widest">{member.id}</p>
+      <p className={`text-slate-400 leading-relaxed font-normal ${isSupervisor ? 'text-base italic mb-8' : 'text-sm mb-6 h-10'}`}>{member.role}</p>
+
+      <div className="flex gap-4 mt-auto opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-all duration-500">
+        <Link href={member.linkedin} target="_blank" className="text-slate-500 hover:text-brand transition-colors">
+          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zM8 19h-3v-11h3v11zM6.5 6.732c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zM20 19h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" /></svg>
+        </Link>
+        <Link href={`mailto:${member.email}`} className="text-slate-500 hover:text-white transition-colors">
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+        </Link>
+      </div>
+    </div>
+  );
+};
 
 export default function Home() {
   const [formName, setFormName] = useState("");
@@ -382,30 +441,16 @@ export default function Home() {
             <p className="text-slate-400 uppercase tracking-[0.3em] text-[10px] font-bold">Research Affiliation 2025</p>
           </div>
 
-          <div className="space-y-32">
+          <div className="space-y-24">
             {/* Supervisors */}
-            <div className="max-w-4xl mx-auto">
+            <div>
               <h3 className="text-brand/80 font-bold uppercase tracking-[0.2em] text-center mb-16 text-[10px]">Supervisory Board</h3>
-              <div className="flex flex-wrap justify-center gap-16">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 max-w-3xl mx-auto px-4">
                 {[
-                  { name: "Dr. Lakmini Abeywardena", role: "Supervisor", photo: `${BASE_PATH}/team/lakmini.jfif`, linkedin: "https://www.linkedin.com/in/lakmini-abeywardhana-65283aa9/", email: "lakmini.d@sliit.lk" },
-                  { name: "Ms. Malithi Navarathne", role: "Co-Supervisor", photo: `${BASE_PATH}/team/malithi.png`, linkedin: "https://www.linkedin.com/in/malithi-nawarathne-2a443b18b/", email: "malithi.n@sliit.lk" }
-                ].map((s, idx) => (
-                  <div key={idx} className="text-center group reveal-scale-in">
-                    <div className="mx-auto w-40 h-40 mb-8 rounded-[32px] border border-white/10 overflow-hidden relative grayscale hover:grayscale-0 transition-all duration-700 shadow-xl group-hover:shadow-brand/5">
-                      <Image src={s.photo} alt={s.name} fill className="object-cover scale-105 group-hover:scale-100 transition-transform duration-700" unoptimized />
-                    </div>
-                    <h4 className="text-xl font-bold text-white mb-2">{s.name}</h4>
-                    <p className="text-brand text-[9px] uppercase tracking-widest font-bold mb-6 italic">{s.role}</p>
-                    <div className="flex justify-center gap-5 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-all duration-500">
-                      <Link href={s.linkedin} target="_blank" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-brand transition-all">
-                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zM8 19h-3v-11h3v11zM6.5 6.732c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zM20 19h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" /></svg>
-                      </Link>
-                      <Link href={`mailto:${s.email}`} className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-brand transition-all">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-                      </Link>
-                    </div>
-                  </div>
+                  { name: "Dr. Lakmini Abeywardena", role: "Supervisor", photo: `${BASE_PATH}/team/lakmini.jfif`, linkedin: "https://www.linkedin.com/in/lakmini-abeywardhana-65283aa9/", email: "lakmini.d@sliit.lk", id: "Supervisor" },
+                  { name: "Ms. Malithi Navarathne", role: "Co-Supervisor", photo: `${BASE_PATH}/team/malithi.png`, linkedin: "https://www.linkedin.com/in/malithi-nawarathne-2a443b18b/", email: "malithi.n@sliit.lk", id: "Co-Supervisor" }
+                ].map((m, idx) => (
+                  <TeamCard key={idx} member={m} idx={idx} isSupervisor />
                 ))}
               </div>
             </div>
@@ -420,22 +465,11 @@ export default function Home() {
                   { name: "Navashanthan T.", id: "IT22274984", role: "Outcome Prediction", email: "it22274984@my.sliit.lk", linkedin: "https://www.linkedin.com/in/thavachchelvam-navashanthan/", photo: `${BASE_PATH}/team/IT22274984.png` },
                   { name: "Sivajanthan S.", id: "IT22316172", role: "Public Interfaces", email: "it22316172@my.sliit.lk", linkedin: "https://www.linkedin.com/in/sivajanthan/", photo: `${BASE_PATH}/team/IT22316172.jfif` }
                 ].map((m, idx) => (
-                  <div key={idx} className="glass-card p-8 group relative flex flex-col items-center text-center reveal-scale-in bg-white/[0.01] hover:bg-white/[0.03] transition-colors" style={{ animationDelay: `${idx * 0.1}s` }}>
-                    <div className="w-28 h-28 mb-6 rounded-full border border-white/10 overflow-hidden relative bg-[#070d19] grayscale group-hover:grayscale-0 transition-all duration-700">
-                      <Image src={m.photo} alt={m.name} fill className="object-cover" unoptimized />
-                    </div>
-                    <h4 className="text-lg font-bold text-white mb-1.5 tracking-tight uppercase">{m.name}</h4>
-                    <p className="text-brand text-[9px] font-bold mb-4 tracking-widest">{m.id}</p>
-                    <p className="text-slate-400 text-sm mb-6 leading-relaxed h-10 font-normal">{m.role}</p>
-
-                    <div className="flex gap-4 mt-auto opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-all duration-500">
-                      <Link href={m.linkedin} target="_blank" className="text-slate-500 hover:text-brand transition-colors"><svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zM8 19h-3v-11h3v11zM6.5 6.732c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zM20 19h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" /></svg></Link>
-                      <Link href={`mailto:${m.email}`} className="text-slate-500 hover:text-white transition-colors"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg></Link>
-                    </div>
-                  </div>
+                  <TeamCard key={idx} member={m} idx={idx} />
                 ))}
               </div>
             </div>
+          </div>
           </div>
         </section>
 
