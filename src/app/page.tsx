@@ -11,7 +11,8 @@ export default function Home() {
   const [isSent, setIsSent] = useState(false);
   const [scrollWidth, setScrollWidth] = useState(0);
   const [bgIndex, setBgIndex] = useState(0);
-  const BASE_PATH = process.env.NODE_ENV === "production" ? "/scjas-research-portfolio" : "";
+  const isProd = process.env.NODE_ENV === "production" || process.env.GITHUB_ACTIONS === "true";
+  const BASE_PATH = isProd ? "/scjas-research-portfolio" : "";
   const backgrounds = [`${BASE_PATH}/bg1.png`, `${BASE_PATH}/bg2.png`, `${BASE_PATH}/bg3.png`];
 
   useEffect(() => {
