@@ -73,11 +73,42 @@ export default function Home() {
     }
   ];
 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   return (
     <main className="min-h-screen bg-[#070d19] text-slate-200 selection:bg-brand selection:text-[#070d19] relative scroll-smooth overflow-x-hidden">
-      <nav className="fixed top-0 left-0 right-0 z-[100] bg-[#070d19]/80 backdrop-blur-md border-b border-white/5 py-5">
-        <div className="max-w-7xl mx-auto px-8 flex justify-end">
-          <div className="flex items-center gap-2 sm:gap-6">
+      {/* MOBILE MENU OVERLAY */}
+      <div className={`fixed inset-0 z-[200] bg-[#070d19]/95 backdrop-blur-2xl transition-all duration-500 lg:hidden ${isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
+        <div className="flex flex-col items-center justify-center h-full gap-8">
+          {[
+            { label: "Home", href: "#home" },
+            { label: "Architecture", href: "#architecture" },
+            { label: "Archive", href: "#archive" },
+            { label: "Milestones", href: "#milestones" },
+            { label: "Team", href: "#team" },
+            { label: "Contact", href: "#contact" }
+          ].map((link) => (
+            <Link 
+              key={link.label} 
+              href={link.href} 
+              onClick={() => setIsMenuOpen(false)}
+              className="text-2xl font-bold uppercase tracking-[0.3em] text-white hover:text-brand transition-all"
+            >
+              {link.label}
+            </Link>
+          ))}
+          <button onClick={() => setIsMenuOpen(false)} className="mt-12 w-16 h-16 rounded-full border border-white/10 flex items-center justify-center text-white">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+          </button>
+        </div>
+      </div>
+
+      <nav className="fixed top-0 left-0 right-0 z-[100] bg-[#070d19]/80 backdrop-blur-md border-b border-white/5 py-4 lg:py-5">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 flex justify-between items-center">
+          <div className="text-brand font-black tracking-tighter text-xl">SCJAS</div>
+          
+          {/* Desktop Nav */}
+          <div className="hidden lg:flex items-center gap-6">
             {[
               { label: "Home", href: "#home" },
               { label: "Architecture", href: "#architecture" },
@@ -95,6 +126,13 @@ export default function Home() {
               </Link>
             ))}
           </div>
+
+          {/* Mobile Toggle */}
+          <button onClick={() => setIsMenuOpen(true)} className="lg:hidden w-10 h-10 flex flex-col justify-center items-end gap-1.5">
+            <div className="w-8 h-0.5 bg-white"></div>
+            <div className="w-5 h-0.5 bg-brand"></div>
+            <div className="w-8 h-0.5 bg-white"></div>
+          </button>
         </div>
       </nav>
 
@@ -359,7 +397,7 @@ export default function Home() {
                     </div>
                     <h4 className="text-xl font-bold text-white mb-2">{s.name}</h4>
                     <p className="text-brand text-[9px] uppercase tracking-widest font-bold mb-6 italic">{s.role}</p>
-                    <div className="flex justify-center gap-5 opacity-0 group-hover:opacity-100 transition-all duration-500">
+                    <div className="flex justify-center gap-5 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-all duration-500">
                       <Link href={s.linkedin} target="_blank" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-brand transition-all">
                         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zM8 19h-3v-11h3v11zM6.5 6.732c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zM20 19h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" /></svg>
                       </Link>
@@ -390,7 +428,7 @@ export default function Home() {
                     <p className="text-brand text-[9px] font-bold mb-4 tracking-widest">{m.id}</p>
                     <p className="text-slate-400 text-sm mb-6 leading-relaxed h-10 font-normal">{m.role}</p>
 
-                    <div className="flex gap-4 mt-auto">
+                    <div className="flex gap-4 mt-auto opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-all duration-500">
                       <Link href={m.linkedin} target="_blank" className="text-slate-500 hover:text-brand transition-colors"><svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zM8 19h-3v-11h3v11zM6.5 6.732c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zM20 19h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" /></svg></Link>
                       <Link href={`mailto:${m.email}`} className="text-slate-500 hover:text-white transition-colors"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg></Link>
                     </div>
