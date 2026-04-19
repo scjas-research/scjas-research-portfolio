@@ -190,8 +190,7 @@ export default function Home() {
       </div>
 
       <nav className="fixed top-0 left-0 right-0 z-[100] bg-[#070d19]/80 backdrop-blur-md border-b border-white/5 py-4 lg:py-5">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 flex justify-between items-center">
-          <div className="text-brand font-black tracking-tighter text-xl">SCJAS</div>
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 flex justify-end items-center h-10 lg:h-12">
           
           {/* Desktop Nav */}
           <div className="hidden lg:flex items-center gap-6">
@@ -251,7 +250,8 @@ export default function Home() {
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-20 lg:py-32 flex flex-col items-center">
 
         {/* HERO SECTION */}
-        <section id="home" className="text-center max-w-[1440px] mx-auto mb-48 reveal-fade-up pt-24 scroll-mt-32 px-4 w-full">
+        <section id="home" className="text-center max-w-[1440px] mx-auto mb-48 pt-24 scroll-mt-32 px-4 w-full">
+          <Reveal>
           <div className="glass-card px-8 lg:px-40 py-14 lg:py-16 bg-[#070d19]/60 backdrop-blur-3xl border-white/10 relative group overflow-hidden w-full">
             <div className="absolute inset-0 opacity-[0.02] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
             
