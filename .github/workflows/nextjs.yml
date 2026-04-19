@@ -59,7 +59,7 @@ jobs:
           # Automatically inject basePath in your Next.js config file and disable
           # server side image optimization (WebP) to support Static Site Adaptation.
           # You can leverage this feature by setting it to true.
-          static_site_generator: next
+          static_site_generator: ""
       - name: Restore cache
         uses: actions/cache@v4
         with:
