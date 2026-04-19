@@ -89,10 +89,18 @@ body {
   }
 
   .reveal-fade-up {
+    opacity: 0;
+  }
+  
+  .reveal-fade-up.in-view {
     animation: fade-up 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
   
   .reveal-scale-in {
+    opacity: 0;
+  }
+  
+  .reveal-scale-in.in-view {
     animation: scale-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
   

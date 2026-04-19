@@ -4,6 +4,33 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
+const Reveal = ({ children, className = "", animation = "reveal-fade-up", threshold = 0.1 }: { children: React.ReactNode, className?: string, animation?: string, threshold?: number }) => {
+  const [isInView, setIsInView] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+        }
+      },
+      { threshold }
+    );
+
+    if (ref.current) observer.observe(ref.current);
+    return () => {
+      if (ref.current) observer.unobserve(ref.current);
+    };
+  }, [threshold]);
+
+  return (
+    <div ref={ref} className={`${animation} ${isInView ? 'in-view' : ''} ${className}`}>
+      {children}
+    </div>
+  );
+};
+
 const TeamCard = ({ member, idx, isSupervisor = false }: { member: any, idx: number, isSupervisor?: boolean }) => {
   const [isInView, setIsInView] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -252,94 +279,106 @@ export default function Home() {
         </section>
 
         {/* CORE SYSTEM ARCHITECTURE */}
-        <section id="architecture" className="w-full mb-48 reveal-fade-up scroll-mt-32">
-          <div className="flex items-center gap-6 mb-16">
-            <div className="h-0.5 w-12 bg-brand/40"></div>
-            <h2 className="text-3xl lg:text-5xl font-bold text-white tracking-tight">System Architecture</h2>
-            <div className="h-0.5 flex-grow bg-white/5"></div>
-          </div>
+        <section id="architecture" className="w-full mb-48 scroll-mt-32">
+          <Reveal>
+            <div className="flex items-center gap-6 mb-16">
+              <div className="h-0.5 w-12 bg-brand/40"></div>
+              <h2 className="text-3xl lg:text-5xl font-bold text-white tracking-tight">System Architecture</h2>
+              <div className="h-0.5 flex-grow bg-white/5"></div>
+            </div>
+          </Reveal>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {modules.map((module, idx) => (
-              <div 
-                key={idx} 
-                onClick={() => setExpandedModule(expandedModule === idx ? null : idx)}
-                className={`glass-card p-10 group reveal-scale-in cursor-pointer relative overflow-hidden transition-all duration-500 ${expandedModule === idx ? 'bg-brand/[0.03] border-brand/20' : ''}`} 
-                style={{ animationDelay: `${idx * 0.1}s` }}
-              >
-                <div className="text-5xl mb-6 transform group-hover:scale-110 transition-transform duration-500">{module.emoji}</div>
-                <h3 className="text-xl lg:text-2xl font-bold text-white mb-4 tracking-tight group-hover:text-brand transition-colors">{module.title}</h3>
-                <p className="text-slate-400 leading-relaxed text-sm transition-opacity group-hover:opacity-80">{module.desc}</p>
-                
-                {/* Expanded Detail */}
-                <div className={`mt-6 overflow-hidden transition-all duration-500 ease-in-out ${expandedModule === idx ? 'max-h-40 opacity-100 shadow-inner' : 'max-h-0 opacity-0'}`}>
-                  <div className="p-5 rounded-xl bg-white/[0.02] border border-white/5">
-                    <p className="text-brand/80 text-sm font-normal leading-relaxed italic">
-                       &ldquo;{module.detail}&rdquo;
-                    </p>
+              <Reveal key={idx} animation="reveal-scale-in">
+                <div 
+                  onClick={() => setExpandedModule(expandedModule === idx ? null : idx)}
+                  className={`glass-card p-10 group cursor-pointer relative overflow-hidden transition-all duration-500 ${expandedModule === idx ? 'bg-brand/[0.03] border-brand/20' : ''}`} 
+                >
+                  <div className="text-5xl mb-6 transform group-hover:scale-110 transition-transform duration-500">{module.emoji}</div>
+                  <h3 className="text-xl lg:text-2xl font-bold text-white mb-4 tracking-tight group-hover:text-brand transition-colors">{module.title}</h3>
+                  <p className="text-slate-400 leading-relaxed text-sm transition-opacity group-hover:opacity-80">{module.desc}</p>
+                  
+                  {/* Expanded Detail */}
+                  <div className={`mt-6 overflow-hidden transition-all duration-500 ease-in-out ${expandedModule === idx ? 'max-h-40 opacity-100 shadow-inner' : 'max-h-0 opacity-0'}`}>
+                    <div className="p-5 rounded-xl bg-white/[0.02] border border-white/5">
+                      <p className="text-brand/80 text-sm font-normal leading-relaxed italic">
+                         &ldquo;{module.detail}&rdquo;
+                      </p>
+                    </div>
                   </div>
-                </div>
 
-                <div className="mt-8 pt-6 border-t border-white/5 w-full flex items-center justify-between">
-                  <div className="text-slate-500 text-[10px] font-bold uppercase tracking-[0.15em]">Module 0{idx + 1}</div>
-                  <div className={`w-6 h-6 rounded-full border border-white/10 flex items-center justify-center transition-all ${expandedModule === idx ? 'rotate-45' : ''}`}>
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" /></svg>
+                  <div className="mt-8 pt-6 border-t border-white/5 w-full flex items-center justify-between">
+                    <div className="text-slate-500 text-[10px] font-bold uppercase tracking-[0.15em]">Module 0{idx + 1}</div>
+                    <div className={`w-6 h-6 rounded-full border border-white/10 flex items-center justify-center transition-all ${expandedModule === idx ? 'rotate-45' : ''}`}>
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" /></svg>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </Reveal>
             ))}
           </div>
         </section>
 
         {/* DOMAIN & METHODOLOGY */}
-        <section id="methodology" className="w-full grid grid-cols-1 lg:grid-cols-12 gap-10 mb-48 reveal-fade-up scroll-mt-32">
+        <section id="methodology" className="w-full grid grid-cols-1 lg:grid-cols-12 gap-10 mb-48 scroll-mt-32">
           <div className="lg:col-span-7 space-y-8">
-            <div className="relative p-10 glass-card bg-white/[0.02] border-white/5 overflow-hidden group">
-              <h3 className="text-2xl lg:text-3xl font-bold text-white mb-6 tracking-tight">The Research Problem</h3>
-              <p className="text-slate-300 leading-relaxed text-base mb-6">
-                The Sri Lankan criminal justice system is currently slowed by a <strong className="text-white font-semibold">manual review bottleneck</strong>. Our methodology introduces advanced automation to process complex case facts and derive semantic legal insights.
-              </p>
-              <div className="flex gap-3">
-                <div className="px-3 py-1.5 rounded-lg bg-red-500/5 border border-red-500/10 text-red-400 text-[9px] font-bold uppercase tracking-wider">High Latency</div>
-                <div className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-400 text-[9px] font-bold uppercase tracking-wider">Outcome Ambiguity</div>
+            <Reveal>
+              <div className="relative p-10 glass-card bg-white/[0.02] border-white/5 overflow-hidden group">
+                <h3 className="text-2xl lg:text-3xl font-bold text-white mb-6 tracking-tight">The Research Problem</h3>
+                <p className="text-slate-300 leading-relaxed text-base mb-6">
+                  The Sri Lankan criminal justice system is currently slowed by a <strong className="text-white font-semibold">manual review bottleneck</strong>. Our methodology introduces advanced automation to process complex case facts and derive semantic legal insights.
+                </p>
+                <div className="flex gap-3">
+                  <div className="px-3 py-1.5 rounded-lg bg-red-500/5 border border-red-500/10 text-red-400 text-[9px] font-bold uppercase tracking-wider">High Latency</div>
+                  <div className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-400 text-[9px] font-bold uppercase tracking-wider">Outcome Ambiguity</div>
+                </div>
               </div>
-            </div>
+            </Reveal>
 
-            <div className="relative p-10 glass-card bg-brand/[0.03] border-brand/10 overflow-hidden group">
-              <h3 className="text-2xl lg:text-3xl font-bold text-white mb-6 tracking-tight">Literature & Innovation</h3>
-              <p className="text-slate-300 leading-relaxed text-base">
-                Bridging the gap between global LLMs and local SL litigation. We utilize <strong className="text-brand font-semibold">Semantic Argument Clustering (SAC)</strong> as a primary methodology for the region.
-              </p>
-            </div>
+            <Reveal>
+              <div className="relative p-10 glass-card bg-brand/[0.03] border-brand/10 overflow-hidden group">
+                <h3 className="text-2xl lg:text-3xl font-bold text-white mb-6 tracking-tight">Literature & Innovation</h3>
+                <p className="text-slate-300 leading-relaxed text-base">
+                  Bridging the gap between global LLMs and local SL litigation. We utilize <strong className="text-brand font-semibold">Semantic Argument Clustering (SAC)</strong> as a primary methodology for the region.
+                </p>
+              </div>
+            </Reveal>
           </div>
 
-          <div className="lg:col-span-5 glass-card p-10 bg-[#070d19]/40 border-white/10 flex flex-col justify-between">
-            <div>
-              <h2 className="text-xl font-bold text-white mb-10 border-b border-white/5 pb-6 tracking-widest uppercase text-center">Tech Stack</h2>
-              <div className="space-y-6">
-                {[
-                  { label: "Core AI", value: "NLP, BERT, Transformers" },
-                  { label: "Knowledge", value: "Semantic Graphs (Neo4j)" },
-                  { label: "Predictive", value: "Bayesian Models" },
-                  { label: "Languages", value: "Sinhala, Tamil, English" },
-                  { label: "Platform", value: "Next.js, FastAPI, Docker" }
-                ].map((item, idx) => (
-                  <div key={idx} className="flex flex-col gap-1 group">
-                    <span className="text-brand/60 text-[8px] uppercase font-bold tracking-widest">{item.label}</span>
-                    <span className="text-white text-base font-medium transition-transform group-hover:translate-x-1 duration-300">{item.value}</span>
+          <div className="lg:col-span-5 flex flex-col h-full">
+            <Reveal className="h-full">
+              <div className="glass-card p-10 bg-[#070d19]/40 border-white/10 h-full flex flex-col justify-between">
+                <div>
+                  <h2 className="text-xl font-bold text-white mb-10 border-b border-white/5 pb-6 tracking-widest uppercase text-center">Tech Stack</h2>
+                  <div className="space-y-6">
+                    {[
+                      { label: "Core AI", value: "NLP, BERT, Transformers" },
+                      { label: "Knowledge", value: "Semantic Graphs (Neo4j)" },
+                      { label: "Predictive", value: "Bayesian Models" },
+                      { label: "Languages", value: "Sinhala, Tamil, English" },
+                      { label: "Platform", value: "Next.js, FastAPI, Docker" }
+                    ].map((item, idx) => (
+                      <div key={idx} className="flex flex-col gap-1 group">
+                        <span className="text-brand/60 text-[8px] uppercase font-bold tracking-widest">{item.label}</span>
+                        <span className="text-white text-base font-medium transition-transform group-hover:translate-x-1 duration-300">{item.value}</span>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                </div>
               </div>
-            </div>
+            </Reveal>
           </div>
         </section>
 
         {/* PROJECT MILESTONES */}
-        <section id="milestones" className="w-full mb-48 reveal-fade-up scroll-mt-32">
-           <div className="flex items-center gap-6 mb-16 px-4">
-             <h2 className="text-3xl lg:text-5xl font-bold text-white tracking-tight">Project Milestones</h2>
-             <div className="h-0.5 flex-grow bg-white/5"></div>
-           </div>
+        <section id="milestones" className="w-full mb-48 scroll-mt-32">
+           <Reveal>
+             <div className="flex items-center gap-6 mb-16 px-4">
+               <h2 className="text-3xl lg:text-5xl font-bold text-white tracking-tight">Project Milestones</h2>
+               <div className="h-0.5 flex-grow bg-white/5"></div>
+             </div>
+           </Reveal>
 
            <div className="relative max-w-5xl mx-auto pl-10 lg:pl-0">
              <div className="absolute left-[3px] lg:left-1/2 top-0 bottom-0 w-px bg-white/10 lg:-translate-x-1/2"></div>
@@ -353,32 +392,36 @@ export default function Home() {
                  { title: "Final Assessment", desc: "Full dissertation submission and final defense.", marks: "10%" },
                  { title: "Viva & Video", desc: "Final viva, commercialization video, and user testing results.", marks: "10%" },
                ].map((milestone, idx) => (
-                 <div key={idx} className={`relative flex flex-col ${idx % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} items-center gap-10 group`}>
-                   <div className="absolute left-[-31px] lg:left-1/2 lg:-translate-x-1/2 w-3 h-3 rounded-full bg-[#070d19] border border-brand z-10 group-hover:scale-125 transition-transform"></div>
-                   
-                   <div className="w-full lg:w-[45%] glass-card p-8 bg-white/[0.01] hover:bg-white/[0.03] border-white/5 transition-all duration-300">
-                     <div className="flex justify-between items-start mb-3">
-                        <h3 className="text-lg lg:text-xl font-bold text-white tracking-tight">{milestone.title}</h3>
-                        <span className="text-brand text-[9px] font-bold uppercase tracking-widest bg-brand/10 px-2.5 py-1 rounded-full">{milestone.marks}</span>
+                 <Reveal key={idx} threshold={0.4}>
+                   <div className={`relative flex flex-col ${idx % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} items-center gap-10 group`}>
+                     <div className="absolute left-[-31px] lg:left-1/2 lg:-translate-x-1/2 w-3 h-3 rounded-full bg-[#070d19] border border-brand z-10 group-hover:scale-125 transition-transform"></div>
+                     
+                     <div className="w-full lg:w-[45%] glass-card p-8 bg-white/[0.01] hover:bg-white/[0.03] border-white/5 transition-all duration-300">
+                       <div className="flex justify-between items-start mb-3">
+                          <h3 className="text-lg lg:text-xl font-bold text-white tracking-tight">{milestone.title}</h3>
+                          <span className="text-brand text-[9px] font-bold uppercase tracking-widest bg-brand/10 px-2.5 py-1 rounded-full">{milestone.marks}</span>
+                       </div>
+                       <p className="text-slate-400 text-sm leading-relaxed">{milestone.desc}</p>
                      </div>
-                     <p className="text-slate-400 text-sm leading-relaxed">{milestone.desc}</p>
+                     <div className="hidden lg:block lg:w-[45%]"></div>
                    </div>
-                   <div className="hidden lg:block lg:w-[45%]"></div>
-                 </div>
+                 </Reveal>
                ))}
              </div>
            </div>
         </section>
 
         {/* DOCUMENTS & PRESENTATIONS */}
-        <section id="archive" className="w-full mb-48 reveal-fade-up scroll-mt-32">
+        <section id="archive" className="w-full mb-48 scroll-mt-32">
            <div className="grid grid-cols-1 xl:grid-cols-2 gap-10">
               {/* Documents Column */}
               <div className="flex flex-col">
-                 <div className="flex items-center gap-6 mb-10">
-                    <h2 className="text-2xl lg:text-4xl font-bold text-white tracking-tight">Resources & Archive</h2>
-                    <div className="h-px flex-grow bg-white/5"></div>
-                 </div>
+                 <Reveal>
+                   <div className="flex items-center gap-6 mb-10">
+                      <h2 className="text-2xl lg:text-4xl font-bold text-white tracking-tight">Resources & Archive</h2>
+                      <div className="h-px flex-grow bg-white/5"></div>
+                   </div>
+                 </Reveal>
                  
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                    {[
@@ -391,25 +434,29 @@ export default function Home() {
                      { title: "Report – Sivajanthan S.", link: "https://drive.google.com/file/d/1mamruNF1itgXoYXBgy3I_z0QdPYc5Ik7/view?usp=sharing" },
                      { title: "Final Dissertation", link: "#" }
                    ].map((doc, idx) => (
-                     <Link key={idx} href={doc.link} target="_blank" className="flex items-center justify-between p-5 glass-card bg-white/[0.01] hover:bg-white/[0.04] border-white/5 group border-l-2 border-l-transparent hover:border-l-brand transition-all">
-                       <div className="max-w-[80%]">
-                         <p className="text-white text-xs lg:text-sm font-bold mb-1 truncate">{doc.title}</p>
-                         <p className="text-slate-500 text-[9px] uppercase tracking-wider">Technical Document</p>
-                       </div>
-                       <div className="w-8 h-8 rounded-full bg-brand/5 flex items-center justify-center text-brand opacity-0 group-hover:opacity-100 transition-opacity">
-                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                       </div>
-                     </Link>
+                     <Reveal key={idx} animation="reveal-scale-in">
+                       <Link href={doc.link} target="_blank" className="flex items-center justify-between p-5 glass-card bg-white/[0.01] hover:bg-white/[0.04] border-white/5 group border-l-2 border-l-transparent hover:border-l-brand transition-all">
+                         <div className="max-w-[80%]">
+                           <p className="text-white text-xs lg:text-sm font-bold mb-1 truncate">{doc.title}</p>
+                           <p className="text-slate-500 text-[9px] uppercase tracking-wider">Technical Document</p>
+                         </div>
+                         <div className="w-8 h-8 rounded-full bg-brand/5 flex items-center justify-center text-brand opacity-0 group-hover:opacity-100 transition-opacity">
+                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                         </div>
+                       </Link>
+                     </Reveal>
                    ))}
                  </div>
               </div>
 
               {/* Presentations Column */}
               <div className="flex flex-col">
-                 <div className="flex items-center gap-6 mb-10">
-                    <h2 className="text-2xl lg:text-4xl font-bold text-white tracking-tight">Artifacts</h2>
-                    <div className="h-px flex-grow bg-white/5"></div>
-                 </div>
+                 <Reveal>
+                   <div className="flex items-center gap-6 mb-10">
+                      <h2 className="text-2xl lg:text-4xl font-bold text-white tracking-tight">Artifacts</h2>
+                      <div className="h-px flex-grow bg-white/5"></div>
+                   </div>
+                 </Reveal>
                  
                  <div className="space-y-4 flex-grow">
                    {[
@@ -418,15 +465,17 @@ export default function Home() {
                      "Progress Milestone 02",
                      "Final Defense Presentation"
                    ].map((pres, idx) => (
-                     <div key={idx} className="p-5 glass-card border-white/5 hover:border-brand/20 flex items-center gap-8 group cursor-pointer transition-all duration-300 bg-white/[0.01] hover:bg-brand/[0.02]">
-                        <div className="w-12 h-12 rounded-xl bg-blue-500/5 text-blue-400 flex items-center justify-center group-hover:bg-brand group-hover:text-[#070d19] transition-all duration-500">
-                          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                     <Reveal key={idx} animation="reveal-scale-in">
+                        <div className="p-5 glass-card border-white/5 hover:border-brand/20 flex items-center gap-8 group cursor-pointer transition-all duration-300 bg-white/[0.01] hover:bg-brand/[0.02]">
+                           <div className="w-12 h-12 rounded-xl bg-blue-500/5 text-blue-400 flex items-center justify-center group-hover:bg-brand group-hover:text-[#070d19] transition-all duration-500">
+                             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                           </div>
+                           <div className="flex-grow">
+                             <p className="text-white font-bold text-base lg:text-lg mb-0.5 group-hover:text-brand transition-colors tracking-tight">{pres}</p>
+                             <p className="text-slate-500 text-[9px] uppercase font-bold tracking-widest">PowerPoint Showcase</p>
+                           </div>
                         </div>
-                        <div className="flex-grow">
-                          <p className="text-white font-bold text-base lg:text-lg mb-0.5 group-hover:text-brand transition-colors tracking-tight">{pres}</p>
-                          <p className="text-slate-500 text-[9px] uppercase font-bold tracking-widest">PowerPoint Showcase</p>
-                        </div>
-                     </div>
+                     </Reveal>
                    ))}
                  </div>
               </div>
@@ -465,7 +514,9 @@ export default function Home() {
                   { name: "Navashanthan T.", id: "IT22274984", role: "Outcome Prediction", email: "it22274984@my.sliit.lk", linkedin: "https://www.linkedin.com/in/thavachchelvam-navashanthan/", photo: `${BASE_PATH}/team/IT22274984.png` },
                   { name: "Sivajanthan S.", id: "IT22316172", role: "Public Interfaces", email: "it22316172@my.sliit.lk", linkedin: "https://www.linkedin.com/in/sivajanthan/", photo: `${BASE_PATH}/team/IT22316172.jfif` }
                 ].map((m, idx) => (
-                  <TeamCard key={idx} member={m} idx={idx} />
+                  <Reveal key={idx} animation="reveal-scale-in">
+                    <TeamCard member={m} idx={idx} />
+                  </Reveal>
                 ))}
               </div>
             </div>
@@ -473,114 +524,116 @@ export default function Home() {
         </section>
 
         {/* CONTACT SECTION */}
-        <section id="contact" className="w-full mb-48 reveal-fade-up scroll-mt-32">
-          <div className="glass-card overflow-hidden bg-[#070d19]/60 backdrop-blur-3xl border-white/10 relative p-12 lg:p-20">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
-              <div className="lg:col-span-5 flex flex-col justify-center">
-                <h2 className="text-4xl lg:text-6xl font-bold text-white mb-8 tracking-tight">Connect</h2>
-                <p className="text-slate-400 text-lg leading-relaxed mb-12">
-                  Open for technical collaborations and research inquiries regarding the SCJAS methodology.
-                </p>
-                <div className="space-y-8">
-                  <div className="flex items-center gap-6 group">
-                    <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-brand">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+        <section id="contact" className="w-full mb-48 scroll-mt-32">
+          <Reveal>
+            <div className="glass-card overflow-hidden bg-[#070d19]/60 backdrop-blur-3xl border-white/10 relative p-12 lg:p-20">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
+                <div className="lg:col-span-5 flex flex-col justify-center">
+                  <h2 className="text-4xl lg:text-6xl font-bold text-white mb-8 tracking-tight">Connect</h2>
+                  <p className="text-slate-400 text-lg leading-relaxed mb-12">
+                    Open for technical collaborations and research inquiries regarding the SCJAS methodology.
+                  </p>
+                  <div className="space-y-8">
+                    <div className="flex items-center gap-6 group">
+                      <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-brand">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                      </div>
+                      <div>
+                        <p className="text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-1">Email</p>
+                        <p className="text-white font-medium text-base">it22026484@my.sliit.lk</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-1">Email</p>
-                      <p className="text-white font-medium text-base">it22026484@my.sliit.lk</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-6 group">
-                    <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-brand">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                    </div>
-                    <div>
-                      <p className="text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-1">Location</p>
-                      <p className="text-white font-medium text-base">SLIIT, Malabe, Sri Lanka</p>
+                    <div className="flex items-center gap-6 group">
+                      <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-brand">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                      </div>
+                      <div>
+                        <p className="text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-1">Location</p>
+                        <p className="text-white font-medium text-base">SLIIT, Malabe, Sri Lanka</p>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-
-              {/* Right Form Column */}
-              <div className="lg:col-span-7">
-                {isSent ? (
-                  <div className="text-center py-20 reveal-scale-in">
-                    <div className="w-20 h-20 bg-brand/10 rounded-full flex items-center justify-center mx-auto mb-8 text-brand">
-                      <svg className="w-10 h-10" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+  
+                {/* Right Form Column */}
+                <div className="lg:col-span-7">
+                  {isSent ? (
+                    <div className="text-center py-20">
+                      <div className="w-20 h-20 bg-brand/10 rounded-full flex items-center justify-center mx-auto mb-8 text-brand">
+                        <svg className="w-10 h-10" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                      </div>
+                      <h3 className="text-3xl font-bold text-white mb-4 tracking-tight">Message Received</h3>
+                      <p className="text-slate-400 text-sm font-medium uppercase tracking-widest">Opening Email Client...</p>
                     </div>
-                    <h3 className="text-3xl font-bold text-white mb-4 tracking-tight">Message Received</h3>
-                    <p className="text-slate-400 text-sm font-medium uppercase tracking-widest">Opening Email Client...</p>
-                  </div>
-                ) : (
-                  <form className="space-y-8" onSubmit={handleSubmit}>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                      <div className="space-y-2">
-                        <label className="text-[9px] uppercase font-bold tracking-widest text-brand ml-1">Full Name</label>
-                        <input required value={formName} onChange={(e) => setFormName(e.target.value)} type="text" placeholder="John Doe" className="w-full bg-[#070d19]/60 border border-white/10 rounded-xl px-6 py-4 text-white focus:border-brand outline-none transition-all text-sm" />
+                  ) : (
+                    <form className="space-y-8" onSubmit={handleSubmit}>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div className="space-y-2">
+                          <label className="text-[9px] uppercase font-bold tracking-widest text-brand ml-1">Full Name</label>
+                          <input required value={formName} onChange={(e) => setFormName(e.target.value)} type="text" placeholder="John Doe" className="w-full bg-[#070d19]/60 border border-white/10 rounded-xl px-6 py-4 text-white focus:border-brand outline-none transition-all text-sm" />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-[9px] uppercase font-bold tracking-widest text-brand ml-1">Email Address</label>
+                          <input required value={formEmail} onChange={(e) => setFormEmail(e.target.value)} type="email" placeholder="john@example.com" className="w-full bg-[#070d19]/60 border border-white/10 rounded-xl px-6 py-4 text-white focus:border-brand outline-none transition-all text-sm" />
+                        </div>
                       </div>
                       <div className="space-y-2">
-                        <label className="text-[9px] uppercase font-bold tracking-widest text-brand ml-1">Email Address</label>
-                        <input required value={formEmail} onChange={(e) => setFormEmail(e.target.value)} type="email" placeholder="john@example.com" className="w-full bg-[#070d19]/60 border border-white/10 rounded-xl px-6 py-4 text-white focus:border-brand outline-none transition-all text-sm" />
+                        <label className="text-[9px] uppercase font-bold tracking-widest text-brand ml-1">Message</label>
+                        <textarea required value={formMessage} onChange={(e) => setFormMessage(e.target.value)} rows={4} placeholder="How can we collaborate?" className="w-full bg-[#070d19]/60 border border-white/10 rounded-xl px-6 py-4 text-white focus:border-brand outline-none transition-all text-sm resize-none"></textarea>
                       </div>
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-[9px] uppercase font-bold tracking-widest text-brand ml-1">Inquiry</label>
-                      <textarea required value={formMessage} onChange={(e) => setFormMessage(e.target.value)} rows={4} placeholder="Your research inquiry..." className="w-full bg-[#070d19]/60 border border-white/10 rounded-xl px-6 py-4 text-white focus:border-brand outline-none transition-all resize-none text-sm" />
-                    </div>
-                    <button type="submit" className="w-full bg-white hover:bg-brand text-[#070d19] py-5 rounded-xl font-bold uppercase text-xs tracking-[0.2em] transition-all duration-300">
-                      Send Inquiry
-                    </button>
-                  </form>
-                )}
+                      <button type="submit" className="w-full bg-brand hover:bg-brand-light text-[#070d19] font-bold py-5 rounded-xl transition-all uppercase tracking-widest text-xs shadow-xl shadow-brand/10">
+                        Send message
+                      </button>
+                    </form>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
+          </Reveal>
         </section>
 
         {/* REFINED FOOTER */}
-        <footer className="w-full reveal-fade-up mb-20">
-          <div className="glass-card p-12 lg:p-16 bg-[#070d19]/60 backdrop-blur-3xl border-white/10 relative overflow-hidden">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-16 mb-16 relative z-10 border-b border-white/5 pb-16">
-              <div className="col-span-1">
-                <div className="text-white font-bold text-2xl tracking-tighter mb-6 uppercase">Criminal Judgment <br /> Analysis System</div>
-                <p className="text-slate-400 text-sm leading-relaxed max-w-xs font-normal">
-                  Academic research initiative focused on the application of NLP methodologies for the Sri Lankan legal domain.
-                </p>
-              </div>
-              
-              <div className="space-y-8">
-                <div className="text-white text-[10px] font-bold uppercase tracking-[0.3em] opacity-60">Project Access</div>
-                <ul className="space-y-4 text-sm text-slate-300 font-medium">
-                  <li className="hover:text-brand transition-colors cursor-pointer tracking-tight">System Architecture</li>
-                  <li className="hover:text-brand transition-colors cursor-pointer tracking-tight">Documentation Archive</li>
-                  <li className="hover:text-brand transition-colors cursor-pointer tracking-tight">Methodology Overview</li>
-                </ul>
-              </div>
-
-              <div className="space-y-10">
-                <div>
-                  <div className="text-white text-[10px] font-bold uppercase tracking-[0.3em] opacity-60 mb-6">Institutional Affiliation</div>
-                  <p className="text-sm text-slate-400 leading-relaxed font-medium">
-                    Sri Lanka Institute of <br /> Information Technology (SLIIT). <br /> Faculty of Computing • 2025
+        <footer className="w-full mb-20 scroll-mt-32">
+          <Reveal>
+            <div className="glass-card p-12 lg:p-16 bg-[#070d19]/60 backdrop-blur-3xl border-white/10 relative overflow-hidden">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-16 mb-16 relative z-10 border-b border-white/5 pb-16">
+                <div className="col-span-1">
+                  <div className="text-white font-bold text-2xl tracking-tighter mb-6 uppercase">Criminal Judgment <br /> Analysis System</div>
+                  <p className="text-slate-400 text-sm leading-relaxed max-w-xs font-normal">
+                    Academic research initiative focused on the application of NLP methodologies for the Sri Lankan legal domain.
                   </p>
                 </div>
-                <div>
+                
+                <div className="space-y-8">
+                  <div className="text-white text-[10px] font-bold uppercase tracking-[0.3em] opacity-60">Project Access</div>
+                  <ul className="space-y-4 text-sm text-slate-300 font-medium">
+                    <li className="hover:text-brand transition-colors cursor-pointer tracking-tight">System Architecture</li>
+                    <li className="hover:text-brand transition-colors cursor-pointer tracking-tight">Documentation Archive</li>
+                    <li className="hover:text-brand transition-colors cursor-pointer tracking-tight">Methodology Overview</li>
+                  </ul>
+                </div>
+  
+                <div className="space-y-10">
+                  <div>
+                    <div className="text-white text-[10px] font-bold uppercase tracking-[0.3em] opacity-60 mb-6">Institutional Affiliation</div>
+                    <p className="text-sm text-slate-400 leading-relaxed font-medium">
+                      Sri Lanka Institute of <br /> Information Technology (SLIIT). <br /> Faculty of Computing • 2025
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex flex-col md:flex-row justify-between items-center gap-6 relative z-10">
+                <p className="text-[10px] text-slate-500 uppercase tracking-widest font-medium">
+                  © 2025 SCJAS Research Project • All Rights Reserved
+                </p>
+                <div className="flex gap-8">
+                   <Link href="#" className="text-slate-500 hover:text-white transition-colors"><svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.372.75 1.103.75 2.222 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" /></svg></Link>
+                   <Link href="#" className="text-slate-500 hover:text-white transition-colors"><svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zM8 19h-3v-11h3v11zM6.5 6.732c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zM20 19h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" /></svg></Link>
                 </div>
               </div>
             </div>
-            
-            <div className="flex flex-col md:flex-row justify-between items-center gap-6 relative z-10">
-              <p className="text-[10px] text-slate-500 uppercase tracking-widest font-medium">
-                © 2025 SCJAS Research Project • All Rights Reserved
-              </p>
-              <div className="flex gap-8">
-                 <Link href="#" className="text-slate-500 hover:text-white transition-colors"><svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.372.75 1.103.75 2.222 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" /></svg></Link>
-                 <Link href="#" className="text-slate-500 hover:text-white transition-colors"><svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zM8 19h-3v-11h3v11zM6.5 6.732c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zM20 19h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" /></svg></Link>
-              </div>
-            </div>
-          </div>
+          </Reveal>
         </footer>
       </div>
     </main>
