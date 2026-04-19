@@ -11,7 +11,8 @@ export default function Home() {
   const [isSent, setIsSent] = useState(false);
   const [scrollWidth, setScrollWidth] = useState(0);
   const [bgIndex, setBgIndex] = useState(0);
-  const backgrounds = ["/bg1.png", "/bg2.png", "/bg3.png"];
+  const BASE_PATH = "/scjas-research-portfolio";
+  const backgrounds = [`${BASE_PATH}/bg1.png`, `${BASE_PATH}/bg2.png`, `${BASE_PATH}/bg3.png`];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -348,8 +349,8 @@ export default function Home() {
               <h3 className="text-brand/80 font-bold uppercase tracking-[0.2em] text-center mb-16 text-[10px]">Supervisory Board</h3>
               <div className="flex flex-wrap justify-center gap-16">
                 {[
-                  { name: "Dr. Lakmini Abeywardena", role: "Supervisor", photo: "/team/lakmini.jfif", linkedin: "https://www.linkedin.com/in/lakmini-abeywardhana-65283aa9/", email: "lakmini.d@sliit.lk" },
-                  { name: "Ms. Malithi Navarathne", role: "Co-Supervisor", photo: "/team/malithi.png", linkedin: "https://www.linkedin.com/in/malithi-nawarathne-2a443b18b/", email: "malithi.n@sliit.lk" }
+                  { name: "Dr. Lakmini Abeywardena", role: "Supervisor", photo: `${BASE_PATH}/team/lakmini.jfif`, linkedin: "https://www.linkedin.com/in/lakmini-abeywardhana-65283aa9/", email: "lakmini.d@sliit.lk" },
+                  { name: "Ms. Malithi Navarathne", role: "Co-Supervisor", photo: `${BASE_PATH}/team/malithi.png`, linkedin: "https://www.linkedin.com/in/malithi-nawarathne-2a443b18b/", email: "malithi.n@sliit.lk" }
                 ].map((s, idx) => (
                   <div key={idx} className="text-center group reveal-scale-in">
                     <div className="mx-auto w-40 h-40 mb-8 rounded-[32px] border border-white/10 overflow-hidden relative grayscale hover:grayscale-0 transition-all duration-700 shadow-xl group-hover:shadow-brand/5">
@@ -375,10 +376,10 @@ export default function Home() {
               <h3 className="text-slate-500 font-bold uppercase tracking-[0.2em] text-center mb-16 text-[10px]">Research Associates</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
                 {[
-                  { name: "Kabisek S.", id: "IT22026620", role: "Argument Generation", email: "it22026620@my.sliit.lk", linkedin: "https://www.linkedin.com/in/kabisek11/", photo: "/team/IT22026620.jfif" },
-                  { name: "Ekanayake S.D.S.", id: "IT22026484", role: "Semantic Clustering", email: "it22026484@my.sliit.lk", linkedin: "https://www.linkedin.com/in/divanka24/", photo: "/team/IT22026484.jfif" },
-                  { name: "Navashanthan T.", id: "IT22274984", role: "Outcome Prediction", email: "it22274984@my.sliit.lk", linkedin: "https://www.linkedin.com/in/thavachchelvam-navashanthan/", photo: "/team/IT22274984.png" },
-                  { name: "Sivajanthan S.", id: "IT22316172", role: "Public Interfaces", email: "it22316172@my.sliit.lk", linkedin: "https://www.linkedin.com/in/sivajanthan/", photo: "/team/IT22316172.jfif" }
+                  { name: "Kabisek S.", id: "IT22026620", role: "Argument Generation", email: "it22026620@my.sliit.lk", linkedin: "https://www.linkedin.com/in/kabisek11/", photo: `${BASE_PATH}/team/IT22026620.jfif` },
+                  { name: "Ekanayake S.D.S.", id: "IT22026484", role: "Semantic Clustering", email: "it22026484@my.sliit.lk", linkedin: "https://www.linkedin.com/in/divanka24/", photo: `${BASE_PATH}/team/IT22026484.jfif` },
+                  { name: "Navashanthan T.", id: "IT22274984", role: "Outcome Prediction", email: "it22274984@my.sliit.lk", linkedin: "https://www.linkedin.com/in/thavachchelvam-navashanthan/", photo: `${BASE_PATH}/team/IT22274984.png` },
+                  { name: "Sivajanthan S.", id: "IT22316172", role: "Public Interfaces", email: "it22316172@my.sliit.lk", linkedin: "https://www.linkedin.com/in/sivajanthan/", photo: `${BASE_PATH}/team/IT22316172.jfif` }
                 ].map((m, idx) => (
                   <div key={idx} className="glass-card p-8 group relative flex flex-col items-center text-center reveal-scale-in bg-white/[0.01] hover:bg-white/[0.03] transition-colors" style={{ animationDelay: `${idx * 0.1}s` }}>
                     <div className="w-28 h-28 mb-6 rounded-full border border-white/10 overflow-hidden relative bg-[#070d19] grayscale group-hover:grayscale-0 transition-all duration-700">
