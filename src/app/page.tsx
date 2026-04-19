@@ -464,21 +464,21 @@ export default function Home() {
                  
                  <div className="space-y-4 flex-grow">
                    {[
-                     "Proposal Presentation",
-                     "Progress Milestone 01",
-                     "Progress Milestone 02",
-                     "Final Defense Presentation"
+                     { title: "Proposal Presentation", link: "https://docs.google.com/presentation/d/1X81Z_ELDG3eX4Hi7Hk8xzVbDu5c32AWn/edit?usp=sharing&ouid=116223931612293540883&rtpof=true&sd=true" },
+                     { title: "Progress Milestone 01", link: "https://docs.google.com/presentation/d/1Taaf-CJbu9Q5fVg9qMb-g3ToPU7lGhmU/edit?usp=sharing&ouid=116223931612293540883&rtpof=true&sd=true" },
+                     { title: "Progress Milestone 02", link: "https://docs.google.com/presentation/d/140K2r3pxU61eN5l5LYfgf-H4gKge_XPh/edit?usp=sharing&ouid=116223931612293540883&rtpof=true&sd=true" },
+                     { title: "Final Defense Presentation", link: "#" }
                    ].map((pres, idx) => (
                      <Reveal key={idx} animation="reveal-scale-in">
-                        <div className="p-5 glass-card border-white/5 hover:border-brand/20 flex items-center gap-8 group cursor-pointer transition-all duration-300 bg-white/[0.01] hover:bg-brand/[0.02]">
+                        <Link href={pres.link} target="_blank" className="p-5 glass-card border-white/5 hover:border-brand/20 flex items-center gap-8 group cursor-pointer transition-all duration-300 bg-white/[0.01] hover:bg-brand/[0.02] block">
                            <div className="w-12 h-12 rounded-xl bg-blue-500/5 text-blue-400 flex items-center justify-center group-hover:bg-brand group-hover:text-[#070d19] transition-all duration-500">
                              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                            </div>
                            <div className="flex-grow">
-                             <p className="text-white font-bold text-base lg:text-lg mb-0.5 group-hover:text-brand transition-colors tracking-tight">{pres}</p>
+                             <p className="text-white font-bold text-base lg:text-lg mb-0.5 group-hover:text-brand transition-colors tracking-tight">{pres.title}</p>
                              <p className="text-slate-500 text-[9px] uppercase font-bold tracking-widest">PowerPoint Showcase</p>
                            </div>
-                        </div>
+                        </Link>
                      </Reveal>
                    ))}
                  </div>
