@@ -1,0 +1,120 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand: #c9a227; /* Sophisticated Gold accent */
+  --color-brand-light: #e5c354;
+  --color-brand-dark: #a17f16;
+  
+  --color-mint: #fdfaf0; /* Warm cream for documents (replacing mint green) */
+  --color-dark-bg: #070d19; /* Deep navy dark background */
+  --color-card-bg: #101828;
+  
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@layer utilities {
+  .anti-gravity {
+    @apply transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_15px_40px_-10px_rgba(201,162,39,0.25)];
+  }
+  .glass-card {
+    @apply bg-[#101828]/80 backdrop-blur-md border border-[#c9a227]/10 rounded-2xl;
+  }
+  .mint-card {
+    @apply bg-[#fdfaf0] text-[#1c1917] border-[#e0cd98] border shadow-sm transition-transform duration-300 hover:-translate-y-1 hover:shadow-md rounded-xl;
+  }
+  
+  @keyframes slow-pan {
+    0% { transform: scale(1) translate(0, 0); }
+    50% { transform: scale(1.05) translate(-1%, -1%); }
+    100% { transform: scale(1) translate(0, 0); }
+  }
+  .animate-slow-pan {
+    animation: slow-pan 25s ease-in-out infinite;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--color-dark-bg);
+  color: #e2e8f0;
+  font-family: var(--font-sans), sans-serif;
+  overflow-x: hidden;
+}
+
+@layer utilities {
+  .anti-gravity {
+    @apply transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_15px_40px_-10px_rgba(201,162,39,0.25)];
+  }
+  
+  .glass-card {
+    @apply bg-[#101828]/60 backdrop-blur-xl border border-[#c9a227]/10 rounded-3xl shadow-2xl transition-all duration-500;
+  }
+  
+  .glass-card:hover {
+    @apply border-[#c9a227]/30 shadow-[0_0_30px_rgba(201,162,39,0.15)] ring-1 ring-[#c9a227]/20;
+  }
+
+  .mint-card {
+    @apply bg-[#fdfaf0] text-[#1c1917] border-[#e0cd98] border shadow-sm transition-transform duration-300 hover:-translate-y-1 hover:shadow-md rounded-xl;
+  }
+  
+  /* Creative Animations */
+  @keyframes slow-pan {
+    0% { transform: scale(1) translate(0, 0); }
+    50% { transform: scale(1.05) translate(-1%, -1%); }
+    100% { transform: scale(1) translate(0, 0); }
+  }
+  
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes scale-in {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  .reveal-fade-up {
+    animation: fade-up 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  
+  .reveal-scale-in {
+    animation: scale-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  
+  .shimmer-effect {
+    background: linear-gradient(90deg, transparent, rgba(201,162,39,0.1), transparent);
+    background-size: 200% 100%;
+    animation: shimmer 3s infinite;
+  }
+
+  .animate-slow-pan {
+    animation: slow-pan 25s ease-in-out infinite;
+  }
+
+  /* Scroll Progress Bar */
+  #scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background: linear-gradient(to right, #c9a227, #fdfaf0);
+    z-index: 9999;
+    box-shadow: 0 0 10px rgba(201,162,39,0.5);
+  }
+}
