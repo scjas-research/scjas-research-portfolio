@@ -198,12 +198,12 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8 flex justify-between items-center h-10 lg:h-12">
           {/* Logo & Brand */}
           <Link href="#home" className="flex items-center gap-3 group">
-            <div className="relative w-9 h-9">
+            <div className="relative w-9 h-9 overflow-hidden">
               <Image 
                 src={`${BASE_PATH}/logo.png`} 
                 alt="JUREKA Logo" 
                 fill 
-                className="object-contain brightness-110 drop-shadow-[0_0_8px_rgba(201,162,39,0.3)] transition-transform duration-500 group-hover:scale-110" 
+                className="object-contain brightness-125 mix-blend-screen transition-transform duration-500 group-hover:scale-110" 
                 unoptimized
               />
             </div>
@@ -278,12 +278,12 @@ export default function Home() {
             <div className="absolute inset-0 opacity-[0.02] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
             
             <div className="relative flex flex-col items-center mb-10">
-              <div className="relative w-28 h-28 lg:w-36 lg:h-36 mb-4">
+              <div className="relative w-28 h-28 lg:w-36 lg:h-36 mb-4 overflow-hidden">
                 <Image 
                   src={`${BASE_PATH}/logo.png`} 
                   alt="JUREKA Logo" 
                   fill 
-                  className="object-contain brightness-110 drop-shadow-[0_0_15px_rgba(201,162,39,0.4)]" 
+                  className="object-contain brightness-125 mix-blend-screen" 
                   unoptimized
                 />
               </div>
@@ -640,12 +640,12 @@ export default function Home() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-16 mb-16 relative z-10 border-b border-white/5 pb-16">
                 <div className="col-span-1">
                   <div className="flex items-center gap-4 mb-8">
-                    <div className="relative w-12 h-12">
+                    <div className="relative w-12 h-12 overflow-hidden">
                       <Image 
                         src={`${BASE_PATH}/logo.png`} 
                         alt="JUREKA Logo" 
                         fill 
-                        className="object-contain brightness-110" 
+                        className="object-contain brightness-125 mix-blend-screen" 
                         unoptimized
                       />
                     </div>
