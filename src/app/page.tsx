@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import JurekaLogo from "./components/JurekaLogo";
 
 const Reveal = ({ children, className = "", animation = "reveal-fade-up", threshold = 0.1, delay = 0 }: { children: React.ReactNode, className?: string, animation?: string, threshold?: number, delay?: number }) => {
   const [isInView, setIsInView] = useState(false);
@@ -198,14 +199,8 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8 flex justify-between items-center h-10 lg:h-12">
           {/* Logo & Brand */}
           <Link href="#home" className="flex items-center gap-3 group">
-            <div className="relative w-9 h-9">
-              <Image 
-                src={`${BASE_PATH}/logo.png`} 
-                alt="JUREKA Logo" 
-                fill 
-                className="object-contain brightness-110 drop-shadow-[0_0_8px_rgba(201,162,39,0.3)] transition-transform duration-500 group-hover:scale-110" 
-                unoptimized
-              />
+            <div className="w-9 h-9 text-brand">
+              <JurekaLogo className="w-full h-full drop-shadow-[0_0_8px_rgba(201,162,39,0.3)] transition-transform duration-500 group-hover:scale-110" />
             </div>
             <div className="flex flex-col -gap-1">
               <span className="text-white font-bold text-lg leading-tight tracking-tighter uppercase group-hover:text-brand transition-colors">
@@ -278,14 +273,8 @@ export default function Home() {
             <div className="absolute inset-0 opacity-[0.02] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
             
             <div className="relative flex flex-col items-center mb-10">
-              <div className="relative w-28 h-28 lg:w-36 lg:h-36 mb-4">
-                <Image 
-                  src={`${BASE_PATH}/logo.png`} 
-                  alt="JUREKA Logo" 
-                  fill 
-                  className="object-contain brightness-110 drop-shadow-[0_0_15px_rgba(201,162,39,0.4)]" 
-                  unoptimized
-                />
+              <div className="w-28 h-28 lg:w-36 lg:h-36 mb-4 text-brand">
+                <JurekaLogo className="w-full h-full drop-shadow-[0_0_15px_rgba(201,162,39,0.4)]" />
               </div>
               <div className="text-center">
                 <h2 className="text-white font-bold text-4xl lg:text-5xl tracking-[0.1em] uppercase mb-1 drop-shadow-sm">JUREKA</h2>
@@ -640,14 +629,8 @@ export default function Home() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-16 mb-16 relative z-10 border-b border-white/5 pb-16">
                 <div className="col-span-1">
                   <div className="flex items-center gap-4 mb-8">
-                    <div className="relative w-12 h-12">
-                      <Image 
-                        src={`${BASE_PATH}/logo.png`} 
-                        alt="JUREKA Logo" 
-                        fill 
-                        className="object-contain brightness-110" 
-                        unoptimized
-                      />
+                    <div className="w-12 h-12 text-brand">
+                      <JurekaLogo className="w-full h-full" />
                     </div>
                     <div className="flex flex-col">
                       <div className="text-white font-bold text-2xl tracking-tight uppercase leading-none">JUREKA</div>
