@@ -143,7 +143,7 @@ export default function Home() {
       emoji: "🎙️", 
       title: "Resource Finder", 
       desc: "Identify relevant laws from plain language case facts.",
-      detail: "Uses BERT-based semantic extraction to query the Penal Code and Criminal Procedure Code, clustering legal sections into Prosecution and Defence categories."
+      detail: "Uses BERT-based semantic extraction to query complex legal statutes, clustering legal sections into Prosecution and Defence categories."
     },
     { 
       emoji: "📄", 
@@ -292,7 +292,7 @@ export default function Home() {
             </h1>
             
             <p className="text-lg lg:text-xl text-slate-400 font-normal max-w-4xl mx-auto leading-relaxed relative z-10 mb-14">
-              An advanced AI-driven research methodology developed for the <span className="text-white font-medium">Sri Lankan Penal Code</span>, 
+              An advanced AI-driven research methodology developed for the <span className="text-white font-medium">Sri Lankan Legal System</span>, 
               leveraging semantic legal extraction and predictive modeling architectures.
             </p>
             
