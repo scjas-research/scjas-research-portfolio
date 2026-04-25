@@ -195,7 +195,22 @@ export default function Home() {
       </div>
 
       <nav className="fixed top-0 left-0 right-0 z-[100] bg-[#070d19]/80 backdrop-blur-md border-b border-white/5 py-4 lg:py-5">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 flex justify-end items-center h-10 lg:h-12">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 flex justify-between items-center h-10 lg:h-12">
+          {/* Logo & Brand */}
+          <Link href="#home" className="flex items-center gap-3 group">
+            <div className="relative w-8 h-8 lg:w-10 lg:h-10">
+              <Image 
+                src={`${BASE_PATH}/logo.png`} 
+                alt="JUREKA Logo" 
+                fill 
+                className="object-contain transition-transform duration-500 group-hover:scale-110" 
+                unoptimized
+              />
+            </div>
+            <span className="text-white font-bold text-lg lg:text-xl tracking-tighter uppercase group-hover:text-brand transition-colors">
+              JUREKA
+            </span>
+          </Link>
           
           {/* Desktop Nav */}
           <div className="hidden lg:flex items-center gap-6">
@@ -260,13 +275,23 @@ export default function Home() {
           <div className="glass-card px-8 lg:px-40 py-14 lg:py-16 bg-[#070d19]/60 backdrop-blur-3xl border-white/10 relative group overflow-hidden w-full">
             <div className="absolute inset-0 opacity-[0.02] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
             
-            <div className="inline-block px-4 py-1.5 rounded-full border border-brand/20 bg-brand/5 text-brand text-[10px] uppercase font-bold tracking-widest mb-10 relative z-10">
-              Research Development Portfolio
+            <div className="relative w-24 h-24 lg:w-32 lg:h-32 mx-auto mb-6">
+              <Image 
+                src={`${BASE_PATH}/logo.png`} 
+                alt="JUREKA Logo" 
+                fill 
+                className="object-contain" 
+                unoptimized
+              />
+            </div>
+
+            <div className="inline-block px-4 py-1.5 rounded-full border border-brand/20 bg-brand/5 text-brand text-[10px] uppercase font-bold tracking-widest mb-8 relative z-10">
+              JUREKA | Research Development Portfolio
             </div>
             
             <h1 className="text-5xl lg:text-7xl font-bold text-white mb-10 relative z-10 leading-tight tracking-tight">
-              Smart Criminal Judgment <br className="hidden lg:block" />
-              <span className="text-brand">Analysis System</span>
+              JUREKA: Smart Criminal <br className="hidden lg:block" />
+              <span className="text-brand">Judgment Analysis</span>
             </h1>
             
             <p className="text-lg lg:text-xl text-slate-400 font-normal max-w-4xl mx-auto leading-relaxed relative z-10 mb-14">
@@ -606,7 +631,18 @@ export default function Home() {
             <div className="glass-card p-12 lg:p-16 bg-[#070d19]/60 backdrop-blur-3xl border-white/10 relative overflow-hidden">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-16 mb-16 relative z-10 border-b border-white/5 pb-16">
                 <div className="col-span-1">
-                  <div className="text-white font-bold text-2xl tracking-tighter mb-6 uppercase">Criminal Judgment <br /> Analysis System</div>
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="relative w-12 h-12">
+                      <Image 
+                        src={`${BASE_PATH}/logo.png`} 
+                        alt="JUREKA Logo" 
+                        fill 
+                        className="object-contain" 
+                        unoptimized
+                      />
+                    </div>
+                    <div className="text-white font-bold text-2xl tracking-tighter uppercase">JUREKA</div>
+                  </div>
                   <p className="text-slate-400 text-sm leading-relaxed max-w-xs font-normal">
                     Academic research initiative focused on the application of NLP methodologies for the Sri Lankan legal domain.
                   </p>
