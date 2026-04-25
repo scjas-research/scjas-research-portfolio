@@ -457,7 +457,7 @@ export default function Home() {
                       { title: "Individual Proposal – Navashanthan T.", link: "https://drive.google.com/file/d/1RYttyOul9FzY-sRxPVBnT8Zlu7CW431V/view?usp=sharing" },
                       { title: "Individual Proposal – Kabisek S.", link: "https://drive.google.com/file/d/19Ycqx_MbsMf3vL2yG6JrlkNdZI1rlsuu/view?usp=sharing" },
                       { title: "Individual Proposal – Sivajanthan S.", link: "https://drive.google.com/file/d/1mamruNF1itgXoYXBgy3I_z0QdPYc5Ik7/view?usp=sharing" },
-                      { title: "Final Dissertation", link: "#" },
+                      { title: "Final Report - Group", link: "https://drive.google.com/file/d/11kio7oVq4n_ERkPDOQe4hYGKdSzLGBQe/view?usp=sharing" },
                       { title: "Checklist Collection", link: "https://drive.google.com/drive/folders/1pm2IWTxgK3SkGL44EjQWkvRtdoDsfVma?usp=sharing" }
                     ].map((doc, idx) => (
                      <Reveal key={idx} animation="reveal-scale-in">
