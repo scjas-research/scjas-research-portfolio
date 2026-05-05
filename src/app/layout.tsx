@@ -15,6 +15,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "JUREKA | Smart Criminal Judgment Analysis System",
   description: "JUREKA: Advanced AI-driven research methodology for the Sri Lankan Penal Code.",
+  icons: {
+    icon: "/icon.png",
+  },
 };
 
 export default function RootLayout({

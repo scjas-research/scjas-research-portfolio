@@ -101,6 +101,7 @@ export default function Home() {
   const [formEmail, setFormEmail] = useState("");
   const [formMessage, setFormMessage] = useState("");
   const [isSent, setIsSent] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const [scrollWidth, setScrollWidth] = useState(0);
   const [bgIndex, setBgIndex] = useState(0);
   const isProd = process.env.NODE_ENV === "production" || process.env.GITHUB_ACTIONS === "true";
@@ -132,7 +133,7 @@ export default function Home() {
     e.preventDefault();
     const subject = encodeURIComponent(`Inquiry from ${formName}`);
     const body = encodeURIComponent(`Name: ${formName}\nEmail: ${formEmail}\n\nMessage:\n${formMessage}`);
-    const mailtoLink = `mailto:sdse1124@gmail.com?subject=${subject}&body=${body}`;
+    const mailtoLink = `mailto:it22026620@my.sliit.lk?subject=${subject}&body=${body}`;
     window.location.href = mailtoLink;
     setIsSent(true);
     setTimeout(() => setIsSent(false), 5000);
@@ -445,9 +446,11 @@ export default function Home() {
               {/* Documents Column */}
               <div className="flex flex-col">
                  <Reveal>
-                   <div className="flex items-center gap-6 mb-10">
+                   <div className="flex items-center gap-4 mb-10">
+                      <div className="w-8 h-8 lg:w-10 lg:h-10 text-brand">
+                         <JurekaLogo className="w-full h-full" />
+                      </div>
                       <h2 className="text-2xl lg:text-4xl font-bold text-white tracking-tight">Resources & Archive</h2>
-                      <div className="h-px flex-grow bg-white/5"></div>
                    </div>
                  </Reveal>
                  
@@ -459,7 +462,7 @@ export default function Home() {
                       { title: "Individual Proposal – Sivajanthan S.", link: "https://drive.google.com/file/d/1mamruNF1itgXoYXBgy3I_z0QdPYc5Ik7/view?usp=sharing" },
                       { title: "Final Report - Group", link: "https://drive.google.com/file/d/11kio7oVq4n_ERkPDOQe4hYGKdSzLGBQe/view?usp=sharing" },
                       { title: "Checklist Collection", link: "https://drive.google.com/drive/folders/1pm2IWTxgK3SkGL44EjQWkvRtdoDsfVma?usp=sharing" }
-                    ].map((doc, idx) => (
+                    ].filter(doc => doc.title.toLowerCase().includes(searchQuery.toLowerCase())).map((doc, idx) => (
                      <Reveal key={idx} animation="reveal-scale-in">
                        <Link href={doc.link} target="_blank" className="flex items-center justify-between p-5 glass-card bg-white/[0.01] hover:bg-white/[0.04] border-white/5 group border-l-2 border-l-transparent hover:border-l-brand transition-all">
                          <div className="max-w-[80%]">
@@ -478,10 +481,29 @@ export default function Home() {
               {/* Presentations Column */}
               <div className="flex flex-col">
                  <Reveal>
-                   <div className="flex items-center gap-6 mb-10">
-                      <h2 className="text-2xl lg:text-4xl font-bold text-white tracking-tight">Artifacts</h2>
-                      <div className="h-px flex-grow bg-white/5"></div>
-                   </div>
+                    <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 mb-10">
+                       <div className="flex items-center gap-4 mt-1">
+                          <div className="w-8 h-8 lg:w-10 lg:h-10 text-brand">
+                             <JurekaLogo className="w-full h-full" />
+                          </div>
+                          <h2 className="text-2xl lg:text-4xl font-bold text-white tracking-tight">Artifacts</h2>
+                       </div>
+                       
+                       {/* Enhanced Search Input - Positioned Slightly Higher */}
+                       <div className="relative group w-full md:w-72 md:-mt-3">
+                          <div className="absolute -inset-0.5 bg-brand/20 rounded-xl blur opacity-0 group-focus-within:opacity-100 transition duration-500"></div>
+                          <div className="relative">
+                             <input 
+                               type="text" 
+                               placeholder="Search research archive..." 
+                               value={searchQuery}
+                               onChange={(e) => setSearchQuery(e.target.value)}
+                               className="w-full bg-[#070d19]/80 border border-brand/30 rounded-xl px-12 py-3 text-sm text-white focus:border-brand focus:ring-1 focus:ring-brand/40 outline-none transition-all placeholder:text-slate-500 backdrop-blur-md"
+                             />
+                             <svg className="w-5 h-5 text-brand/60 absolute left-4 top-1/2 -translate-y-1/2 group-focus-within:text-brand transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                          </div>
+                       </div>
+                    </div>
                  </Reveal>
                  
                  <div className="space-y-4 flex-grow">
@@ -490,7 +512,7 @@ export default function Home() {
                      { title: "Progress Milestone 01", link: "https://docs.google.com/presentation/d/1Taaf-CJbu9Q5fVg9qMb-g3ToPU7lGhmU/edit?usp=sharing&ouid=116223931612293540883&rtpof=true&sd=true" },
                      { title: "Progress Milestone 02", link: "https://docs.google.com/presentation/d/140K2r3pxU61eN5l5LYfgf-H4gKge_XPh/edit?usp=sharing&ouid=116223931612293540883&rtpof=true&sd=true" },
                      { title: "Final Defense Presentation", link: "#" }
-                   ].map((pres, idx) => (
+                   ].filter(pres => pres.title.toLowerCase().includes(searchQuery.toLowerCase())).map((pres, idx) => (
                      <Reveal key={idx} animation="reveal-scale-in">
                         <Link href={pres.link} target="_blank" className="p-5 glass-card border-white/5 hover:border-brand/20 flex items-center gap-8 group cursor-pointer transition-all duration-300 bg-white/[0.01] hover:bg-brand/[0.02] block">
                            <div className="w-12 h-12 rounded-xl bg-blue-500/5 text-blue-400 flex items-center justify-center group-hover:bg-brand group-hover:text-[#070d19] transition-all duration-500">
@@ -559,6 +581,9 @@ export default function Home() {
             <div className="glass-card overflow-hidden bg-[#070d19]/60 backdrop-blur-3xl border-white/10 relative p-12 lg:p-20">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
                 <div className="lg:col-span-5 flex flex-col justify-center">
+                  <div className="w-12 h-12 text-brand mb-6">
+                    <JurekaLogo className="w-full h-full" />
+                  </div>
                   <h2 className="text-4xl lg:text-6xl font-bold text-white mb-8 tracking-tight">Connect</h2>
                   <p className="text-slate-400 text-lg leading-relaxed mb-12">
                     Open for technical collaborations and research inquiries regarding the SCJAS methodology.
@@ -570,7 +595,7 @@ export default function Home() {
                       </div>
                       <div>
                         <p className="text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-1">Email</p>
-                        <a href="mailto:sdse1124@gmail.com" className="text-white font-medium text-base hover:text-brand transition-colors">Inquiry for Collaboration</a>
+                        <a href="mailto:it22026620@my.sliit.lk" className="text-white font-medium text-base hover:text-brand transition-colors">Inquiry for Collaboration</a>
                       </div>
                     </div>
                     <div className="flex items-center gap-6 group">
